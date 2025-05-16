@@ -11,7 +11,7 @@ SpatialPCA is a spatially aware dimension reduction method that aims to infer a 
 You can install the current version of SpatialPCA from GitHub with:
 ```r
 library(devtools)
-install_github("shangll123/SpatialPCA")
+install_github("Edward-Z-Chen/SpatialPCA")
 ```
 
 ## Package Tutorial
