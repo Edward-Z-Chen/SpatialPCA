@@ -145,7 +145,7 @@ CreateSpatialPCAObject <- function(counts, location, covariate=NULL,project = "S
 								Seu = SCTransform(Seu, return.only.var.genes = FALSE, variable.features.n = NULL,  variable.features.rv.th = 1.3)
 						 		cat(paste("## Custom gene list contains ",length(customGenelist)," genes. \n"))
 						 		customGenelist = as.character(customGenelist)
-						 		ind_match = na.omit(match(customGenelist, rownames(Seu@assays$SCT@scale.data)))
+						 		ind_match = na.omit(match(customGenelist, rownames(Seu)))
 						 		cat(paste("## In total ",length(ind_match)," custom genes are matched with genes in the count matrix. \n"))
 						 		object@normalized_expr = Seu@assays$SCT@scale.data[ind_match,]
 						 		cat(paste("## Use ",length(ind_match)," custom genes for analysis. \n"))
@@ -193,8 +193,8 @@ CreateSpatialPCAObject <- function(counts, location, covariate=NULL,project = "S
 				 	if(sparkversion=="spark"){
 												cat(paste("## Use spark.test function in SPARK package to select spatially variable genes. \n"))
 				                #suppressMessages(require(SPARK))
-				                count_test_spark = object@counts[na.omit(match(rownames(Seu@assays$SCT@scale.data), rownames(object@counts))), na.omit(match(colnames(Seu@assays$SCT@scale.data),colnames(object@counts)))]
-				                location_test_spark = as.data.frame(object@location[match(colnames(Seu@assays$SCT@scale.data), rownames(object@location)), ])
+				                count_test_spark = object@counts[na.omit(match(rownames(Seu), rownames(object))), na.omit(match(colnames(Seu),colnames(object)))]
+				                location_test_spark = as.data.frame(object@location[match(colnames(Seu), colnames(object)), ])
 				                spark_result <- spark(count_test_spark, location_test_spark,numCores = numCores_spark)
 				                significant_gene_number = sum(spark_result@res_mtest$adjusted_pvalue <= 0.05)
 				                SVGnames = rownames(spark_result@res_mtest[order(spark_result@res_mtest$adjusted_pvalue),])[1:significant_gene_number]
